@@ -1,0 +1,2 @@
+# PAMS_NFT
+2022_UGRP
