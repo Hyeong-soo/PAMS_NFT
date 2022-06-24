@@ -7,4 +7,5 @@ NFT와 블록체인을 이용한 PAMS 시스템 개선과 NFT 소유자들의 �
 팀원: 김형수 hyeongsoo@postech.ac.kr<br>
 팀원: 최대현 daehyeonchoi@postech.ac.kr<br>
 팀원: 차은성 ender3553@postech.ac.kr<br>
-     신상현 email.postech.ac.kr
+팀원: 신상현 ohsong656565@gmail.com<br>
+github Changing
