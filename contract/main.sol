@@ -31,6 +31,9 @@ contract PAMS {
 	
 	string kind; //활동이 어떤 종류나 (동아리 ,대회, 학과, 비교 활동 등등)
 
+	string url; //nft의 ipfs 주소
+
+	bool isTradable; //교환이나 판매 가능 여부
 	}
 	
 	extraActToken[] public tokens;
@@ -40,9 +43,10 @@ contract PAMS {
         string memory _name,
         string memory _summary,
         uint32 _pamPoint,
-        string memory _kind) private onlyContractOwner {
+        string memory _kind,
+		string memory _url) private onlyContractOwner {
 
-		tokens.push(extraActToken( totalCount, _name, _summary, _pamPoint, _kind));
+		tokens.push(extraActToken( totalCount, _name, _summary, _pamPoint, _kind, _url, false));
 	}
 	
 
@@ -52,16 +56,22 @@ contract PAMS {
         string memory _summary,
         uint32 _pamPoint,
         string memory _kind,
-        uint32[] memory _studentList
+        uint32[] memory _studentList,
+		string memory _url
         ) public onlyContractOwner {
 
 		    for( uint i = 0; i< _studentList.length ; i++ )
             {
-		        _createToken( _name, _summary, _pamPoint, _kind );
+		        _createToken( _name, _summary, _pamPoint, _kind, _url );
 		        tokenOwner[totalCount++] = classNumberToAddress[ _studentList[i] ];
             }
         }
     function getTokenList() public view returns(extraActToken[] memory) {
         return tokens;
     }
+
+	function generateRandomNFT(string memory _url) public { //밈 토큰
+		tokens.push(extraActToken(totalCount, "POSTECHIAN_MEME_NFT", "This is randomly generated Postechian meme NTF by using some gold.", 0, "POSTECHIAN_MEME_NFT", _url, true));
+		tokenOwner[totalCount++] = msg.sender;
+	}
 }
