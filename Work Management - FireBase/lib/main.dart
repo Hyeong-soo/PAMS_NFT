@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() => runApp(MyApp());
+void main() async
+{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class ToDo{
   bool isDone = false;
   String? title;
 
-  ToDo(this.title);
+  ToDo(this.title, {this.isDone = false});
 }
 
 class MyApp extends StatelessWidget
@@ -32,7 +39,7 @@ class ToDoListPage extends StatefulWidget
 
 class _ToDoListPageState extends State<ToDoListPage>
 {
-  final _items = <ToDo>[];
+  //final _items = <ToDo>[];
 
   var _ToDoController = TextEditingController();
 
@@ -45,29 +52,30 @@ class _ToDoListPageState extends State<ToDoListPage>
   void _addToDo(ToDo todo)
   {
     setState(() {
-      _items.add(todo);
+      FirebaseFirestore.instance.collection('ToDo').add(
+        {'title' : todo.title, 'isDone' : todo.isDone}
+      );
       _ToDoController.text = '';
     });
   }
 
-  void _deleteDoTo(ToDo todo)
+  void _deleteDoTo(DocumentSnapshot doc)
   {
-    setState(() {
-      _items.remove(todo);
-    });
+    FirebaseFirestore.instance.collection('ToDo').doc(doc.id).delete();
   }
 
-  void _toggleToDo(ToDo todo)
+  void _toggleToDo(DocumentSnapshot doc)
   {
-    setState(() {
-      todo.isDone = !todo.isDone;
-    });
+    FirebaseFirestore.instance.collection('ToDo').doc(doc.id).update(
+      {'isDone' : !doc['isDone']}
+    );
   }
 
-  Widget _buildItemWidget(ToDo todo)
+  Widget _buildItemWidget(DocumentSnapshot doc)
   {
+    final todo = ToDo(doc['title'], isDone: doc['isDone']);
     return ListTile(
-      onTap: () => _toggleToDo(todo),
+      onTap: () => _toggleToDo(doc),
       title: Text(
         todo.title!,
         style: todo.isDone
@@ -79,7 +87,7 @@ class _ToDoListPageState extends State<ToDoListPage>
     ),
       trailing: IconButton(
         icon: Icon(Icons.delete_forever),
-        onPressed: () => _deleteDoTo(todo),
+        onPressed: () => _deleteDoTo(doc),
       ),
     );
   }
@@ -108,11 +116,21 @@ class _ToDoListPageState extends State<ToDoListPage>
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView(
-                  children: _items.map((todo) =>
-                  _buildItemWidget(todo)).toList(),
-                ),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection('ToDo').snapshots(),
+                builder: (context, snapshot) {
+                  if(!snapshot.hasData)
+                    {
+                      return CircularProgressIndicator();
+                    }
+                  final documents = snapshot.data!.docs;
+                  return Expanded(
+                    child: ListView(
+                      children: documents.map((doc) =>
+                      _buildItemWidget(doc)).toList(),
+                    ),
+                  );
+                }
               ),
             ],
           ),
