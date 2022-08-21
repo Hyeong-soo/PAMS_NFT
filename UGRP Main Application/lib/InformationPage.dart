@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'LogInFormField.dart';
+import 'AppPrimaryButton.dart';
+
+class InformationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 320,
+      height: 380,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "PAMPLENET",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFCD0051),
+                    ),
+                  ),
+                  Text(
+                    "Welcome Users !",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFCD0051).withAlpha(120),
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Container(
+                child: Image(
+                  image: AssetImage("assets/PAMPLENET_LOGO.png"),
+                  width: 75,
+                  height: 75,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Write Your Information",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFFCD0051),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          LogInFormField(
+            hintText: "Email...",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          LogInFormField(
+            hintText: "Student ID...",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          AppPrimaryButton(
+            text: "Finish !",
+          ),
+        ],
+      ),
+    );
+  }
+}
