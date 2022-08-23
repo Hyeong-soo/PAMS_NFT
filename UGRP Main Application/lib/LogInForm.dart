@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'LogInFormField.dart';
-import 'AppPrimaryButton.dart';
+//import 'AppPrimaryButton.dart';
 
 class LogInForm extends StatefulWidget {
   LogInForm({this.onTabChanged});
@@ -63,7 +63,7 @@ class _LogInFormState extends State<LogInForm> {
             height: 20,
           ),
           Text(
-            "Create Your Name",
+            "Write Your Information",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -74,21 +74,23 @@ class _LogInFormState extends State<LogInForm> {
             height: 10,
           ),
           LogInFormField(
-            hintText: "Real Name...",
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          LogInFormField(
             hintText: "NickName...",
           ),
           SizedBox(
             height: 10,
           ),
-          AppPrimaryButton(
-            text: "Next Page",
-            onTabChanged: widget.onTabChanged,
+          LogInFormField(
+            hintText: "POVIS ID...",
           ),
+          SizedBox(
+            height: 10,
+          ),
+          LogInFormField(
+            hintText: "POVIS PassWord...",
+          ),
+          /*AppPrimaryButton(
+            text: "Finish !",
+          ),*/
         ],
       ),
     );

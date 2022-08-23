@@ -75,10 +75,8 @@ class _LogInPageState extends State<LogInPage> with SingleTickerProviderStateMix
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 30,
-            ),
             pageHeader(),
+            SizedBox(height: 10),
             Stack(
               children: [
                 AnimatedOpacity(
@@ -91,7 +89,7 @@ class _LogInPageState extends State<LogInPage> with SingleTickerProviderStateMix
                       ..rotateY(math.pi - _rotationAnimation!.value * math.pi / 180)
                       ..rotateZ(0),
                     alignment: FractionalOffset.center,
-                    child: LogInForm(),
+                    child: Center(child: LogInForm()),
                   ),
                 ),
                 AnimatedOpacity(
@@ -107,7 +105,7 @@ class _LogInPageState extends State<LogInPage> with SingleTickerProviderStateMix
                     child: InformationPage(),
                   ),
                 ),
-              ]
+              ],
             ),
             LogInTabs(
               onTabChanged: (value)
@@ -125,7 +123,7 @@ class _LogInPageState extends State<LogInPage> with SingleTickerProviderStateMix
   Widget pageHeader()
   {
     return Container(
-      margin: const EdgeInsets.all(32),
+      margin: const EdgeInsets.all(20),
       child: Text(
         "Let's Go Create\nYour New Account",
         style: TextStyle(
