@@ -11,6 +11,12 @@ class _FirstPageState extends State<FirstPage>
   @override
   Widget build(BuildContext context)
   {
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final standardDeviceWidth = 375;
+    final Factor_Width = deviceWidth/standardDeviceWidth;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    final standardDeviceHeight = 812;
+    final Factor_Height = deviceHeight/standardDeviceHeight;
     return Scaffold(
       body: Center(
         child: GestureDetector(
@@ -22,30 +28,25 @@ class _FirstPageState extends State<FirstPage>
               );
             },
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Expanded(
-                flex: 304,
-                child: Container(
-                )
+              Container(
+                height: Factor_Height * 304
               ),
-              Expanded(
-                flex: 140,
-                child: Container(
-                  height: 140,
-                  width: 140,
-                  child: Image.asset('assets/LoGo.png'),
+              Container(
+                child: Image.asset(
+                  'assets/LoGo.png',
+                  height: 140 * Factor_Height,
+                  width: 140 * Factor_Height,
+                  fit: BoxFit.fill,
                 ),
               ),
-              Expanded(
-                flex: 207,
-                child: Container(
-                  
-                )
+              Container(
+                height: 207 * Factor_Height,
               ),
-              Expanded(
-                flex: 33,
+              Container(
+                height: 30 * Factor_Height,
                 child: Column(
                   children: <Widget>[
                     Expanded(
@@ -53,6 +54,7 @@ class _FirstPageState extends State<FirstPage>
                         'from',
                         style: TextStyle(
                           fontFamily: 'Spoqa-Medium',
+                          fontSize: (30*Factor_Height)/2,
                         ),
                       ),
                     ),
@@ -62,17 +64,15 @@ class _FirstPageState extends State<FirstPage>
                         style: TextStyle(
                           fontFamily: 'Spoqa-Bold',
                           color: Color(0xFFCD0051),
+                          fontSize: (30*Factor_Height)/2,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                flex: 99,
-                child: Container(
-
-                ),
+              Container(
+                height: 99 * Factor_Height,
               ),
             ],
           ),
