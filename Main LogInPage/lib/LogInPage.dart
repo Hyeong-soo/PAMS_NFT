@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Main_HomePage.dart';
+import 'wallet.dart';
 
 class LogInPage extends StatefulWidget{
   @override
@@ -53,12 +53,16 @@ class _LogInPageState extends State<LogInPage>
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Container(
+                height: 29 * Factor_Height,
+              ),
               Container(
                 height: 50 * Factor_Height,
               ),
@@ -234,7 +238,7 @@ class _LogInPageState extends State<LogInPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder:
-                            (context) => MyApp()),
+                            (context) => wallet()),
                       );
                     },
                     child: Stack(

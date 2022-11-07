@@ -11,12 +11,21 @@ class Build_First_Class
   Build_First_Class(this.ImagePath, this.Title);
 }
 
+class Build_Second_Class
+{
+  Image? ImagePath;
+  Build_Second_Class(this.ImagePath);
+}
+
 double? value_height;
 double? value_width;
 
 int? _CurrentPage = 0;
+int? _CurrentPage_Second = 0;
 
 List<int> _First_index = [0,1,2];
+
+List<int> _Second_index = [0,1,2,3,4];
 
 List<Build_First_Class> First_List = [
   Build_First_Class(
@@ -126,6 +135,14 @@ List<Build_First_Class> First_List = [
   ),
 ];
 
+List<Build_Second_Class> Second_List = [
+  Build_Second_Class(Image.asset('assets/Second_Imagepath_1.png')),
+  Build_Second_Class(Image.asset('assets/Second_Imagepath_2.png')),
+  Build_Second_Class(Image.asset('assets/Second_Imagepath_3.png')),
+  Build_Second_Class(Image.asset('assets/Second_Imagepath_4.png')),
+  Build_Second_Class(Image.asset('assets/Second_Imagepath_5.png')),
+];
+
 class Home_Page extends StatefulWidget {
   @override
   State<Home_Page> createState() => _Home_PageState();
@@ -233,7 +250,124 @@ class _Home_PageState extends State<Home_Page> {
 
   Widget _Build_Second()
   {
-    return Container();
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final standardDeviceWidth = 375;
+    final Factor_Width = deviceWidth/standardDeviceWidth;
+    final deviceHeight = MediaQuery.of(context).size.height;
+    final standardDeviceHeight = 812;
+    final Factor_Height = deviceHeight/standardDeviceHeight;
+    return Column(
+      children: [
+        Container(
+          height: 20 * Factor_Height,
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 21.0 * Factor_Width),
+          height: 40 * Factor_Height,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '가장 핫한 활동',
+                style: TextStyle(
+                  fontFamily: 'Spoqa-Bold',
+                  fontSize: 20.0 * Factor_Height,
+                ),
+              ),
+              Container(
+                width: 24 * Factor_Height,
+                height: 24 * Factor_Height,
+                child: Image.asset('assets/Home_Page_Fire.png'),
+              ),
+              Spacer(),
+              Container(
+                width: 19 * Factor_Width,
+                child: GestureDetector
+                  (
+                    child: Image.asset('assets/Home_Page_Arrow.png'),
+                    onTap: (){
+
+                    },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 187.5 * Factor_Height,
+          child: CarouselSlider(
+            options: CarouselOptions(
+              height: 187.5 * Factor_Height,
+              enlargeCenterPage: true,
+              viewportFraction: 0.6,
+              autoPlay: false,
+              onPageChanged: (e, reason)
+              {
+                setState(() {
+                  _CurrentPage_Second = e;
+                });
+              },
+            ),
+
+            items: _Second_index.map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return Container(
+                    //margin: EdgeInsets.symmetric(horizontal: 24.0 * Factor_Width),
+                    //width: MediaQuery.of(context).size.width,
+                    child: Container(
+                      child: Second_List[i].ImagePath,
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+        ),
+        Container(
+          height: 15.5 * Factor_Height,
+        ),
+        Container(
+          height: 8 * Factor_Height,
+        ),
+        Container(
+          height: 44 * Factor_Height,
+        ),
+        Container(
+          height: 40 * Factor_Height,
+        ),
+        Container(
+          height: 125 * Factor_Height,
+        ),
+        Container(
+          height: 41 * Factor_Height,
+        ),
+        Container(
+          height: 40 * Factor_Height,
+        ),
+        Container(
+          height: 125 * Factor_Height,
+        ),
+        Container(
+          height: 41 * Factor_Height,
+        ),
+        Container(
+          height: 40 * Factor_Height,
+        ),
+        Container(
+          height: 239 * Factor_Height,
+        ),
+        Container(
+          height: 15.5 * Factor_Height,
+        ),
+        Container(
+          height: 8 * Factor_Height,
+        ),
+        Container(
+          height: 24 * Factor_Height,
+        ),
+      ],
+    );
   }
 
   Widget _Build_Third()

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'NFT_Reservation.dart';
 import 'dart:io';
+//import 'package:image/image.dart';
 
 class Request_Information extends StatefulWidget {
 
@@ -104,7 +105,7 @@ class _Request_InformationState extends State<Request_Information> {
             SimpleDialogOption(
               child: Text(
                 '카메라로 이미지 찍기',
-                style: TextStyle(color: Color(0xFF3CC3C)),
+                style: TextStyle(color: Color(0xFF3C3C3C)),
               ),
               onPressed: captureImageWithCamera,
             ),
@@ -128,19 +129,6 @@ class _Request_InformationState extends State<Request_Information> {
     );
   }
 
-  controlUploadAndSave() async {
-    setState(() {
-      uploading = true;
-    });
-    await compressingPhoto();
-    String downloadUrl = await uploadPhoto(file);
-    savePostInfoToFireStore(
-      url: downloadUrl,
-
-    );
-
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
@@ -157,13 +145,17 @@ class _Request_InformationState extends State<Request_Information> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Container(
+                height: 32 * Factor_Height,
+              ),
               Container(
                 height: 43 * Factor_Height,
               ),
@@ -199,71 +191,77 @@ class _Request_InformationState extends State<Request_Information> {
               Container(
                 height: 11 * Factor_Height,
               ),
-              Container(
-                width: 329 * Factor_Height,
-                height: 220 * Factor_Height,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xFFC0C0C0),
-                    style: BorderStyle.solid,
+              Center(
+                child: Container(
+                  width: 329 * Factor_Height,
+                  height: 230 * Factor_Height,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(0xFFC0C0C0),
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Center(
-                  child: file == null
-                      ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        height: 86 * Factor_Height,
-                      ),
-                      Icon(Icons.add_photo_alternate, color: Color(0xFFDDDDDD), size: 48 * Factor_Height),
-                      Container(
-                        height: 13 * Factor_Height,
-                      ),
-                      Container(
-                        height: 20 * Factor_Height,
-                        child: Container(
-                          width: 80 * Factor_Width,
-                          child: GestureDetector(
-                            onTap:(){
-                              takeImage(context);
-                            },
-                            child: Stack(
-                              children: [
-                                Center(
-                                  child: Opacity(
-                                    opacity: 0.73,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFCD0051),
-                                        borderRadius: BorderRadius.circular(6),
+                  child: Center(
+                    child: file == null
+                        ? Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: 86 * Factor_Height,
+                        ),
+                        Container(
+                          height: 48 * Factor_Height,
+                          width: 48 * Factor_Height,
+                          child: Image.asset('assets/Image_Icon.png', color: Color(0xFFDDDDDD), fit: BoxFit.fill),
+                        ),
+                        Container(
+                          height: 13 * Factor_Height,
+                        ),
+                        Container(
+                          height: 20 * Factor_Height,
+                          child: Container(
+                            width: 80 * Factor_Height,
+                            child: GestureDetector(
+                              onTap:(){
+                                takeImage(context);
+                              },
+                              child: Stack(
+                                children: [
+                                  Center(
+                                    child: Opacity(
+                                      opacity: 0.73,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFCD0051),
+                                          borderRadius: BorderRadius.circular(6),
+                                        ),
+                                        width: 80 * Factor_Height,
                                       ),
-                                      width: 80 * Factor_Width,
                                     ),
                                   ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    'Upload Image',
-                                    style: TextStyle(
-                                      fontSize: 10 * Factor_Width,
-                                      fontFamily: 'Spoqa-Regular',
-                                      color: Colors.white,
+                                  Center(
+                                    child: Text(
+                                      'Upload Image',
+                                      style: TextStyle(
+                                        fontSize: 10 * Factor_Height,
+                                        fontFamily: 'Spoqa-Regular',
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: 53 * Factor_Height
-                      ),
-                    ],
-                  )
-                      : Image.file(File(file!.path))
+                        Container(
+                          height: 53 * Factor_Height
+                        ),
+                      ],
+                    )
+                        : Image.file(File(file!.path))
+                  ),
                 ),
               ),
               Container(
@@ -445,54 +443,55 @@ class _Request_InformationState extends State<Request_Information> {
               Container(
                 height: 52 * Factor_Height,
               ),
-              Container(
-                height: 53 * Factor_Height,
+              Center(
                 child: Container(
-              width: 300 * Factor_Width,
-              child: GestureDetector(
-                onTap:()
-                {
-                  uploading ? null : controlUploadAndSave();
-                  _add_NFT_Information(NFT_Information(
-                    file,
-                    _NFT_NextController1.text,
-                    _NFT_NextController2.text,
-                    _NFT_NextController3.text,
-                    _NFT_NextController4.text,
-                  ));
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder:
-                        (context) => NFT_Reservation()),
-                  );
-                },
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Opacity(
-                        opacity: 0.73,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFCD0051),
-                            borderRadius: BorderRadius.circular(12),
+                  height: 53 * Factor_Height,
+                  child: Container(
+                width: 300 * Factor_Width,
+                child: GestureDetector(
+                  onTap:()
+                  {
+                    _add_NFT_Information(NFT_Information(
+                      file,
+                      _NFT_NextController1.text,
+                      _NFT_NextController2.text,
+                      _NFT_NextController3.text,
+                      _NFT_NextController4.text,
+                    ));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder:
+                          (context) => NFT_Reservation()),
+                    );
+                  },
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: Opacity(
+                          opacity: 0.73,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFCD0051),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            width: 300 * Factor_Width,
                           ),
-                          width: 300 * Factor_Width,
                         ),
                       ),
-                    ),
-                    Center(
-                      child: Text(
-                        'NFT 제작 요청하기',
-                        style: TextStyle(
-                          fontSize: 17 * Factor_Width,
-                          fontFamily: 'Spoqa-Bold',
-                          color: Colors.white,
+                      Center(
+                        child: Text(
+                          'NFT 제작 요청하기',
+                          style: TextStyle(
+                            fontSize: 17 * Factor_Width,
+                            fontFamily: 'Spoqa-Bold',
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                  ),
                 ),
               ),
               Container(

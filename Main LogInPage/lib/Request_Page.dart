@@ -16,12 +16,16 @@ class _Request_PageState extends State<Request_Page> {
     final standardDeviceHeight = 812;
     final Factor_Height = deviceHeight/standardDeviceHeight;
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Container(
+              height: 27 * Factor_Height,
+            ),
             Container(
               height: 48 * Factor_Height,
             ),

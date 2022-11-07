@@ -18,6 +18,7 @@ class _FirstPageState extends State<FirstPage>
     final standardDeviceHeight = 812;
     final Factor_Height = deviceHeight/standardDeviceHeight;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: GestureDetector(
             onTap: () {
@@ -31,6 +32,9 @@ class _FirstPageState extends State<FirstPage>
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Container(
+                height: Factor_Height * 32
+              ),
               Container(
                 height: Factor_Height * 304
               ),
