@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/untitled/build" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/UGRP Main Application/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/UGRP Main Application/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/UGRP Main Application/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled5/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled5/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled5/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Main LogInPage/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Main LogInPage/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Main LogInPage/build" />
+      <excludeFolder url="file://$MODULE_DIR$/titled/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/titled/build" />
+      <excludeFolder url="file://$MODULE_DIR$/titled/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/title/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/title/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/title/build" />
+      <excludeFolder url="file://$MODULE_DIR$/UGRP Main Application/build" />
+      <excludeFolder url="file://$MODULE_DIR$/UGRP Main Application/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/UGRP Main Application/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Work Management - FireBase/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/Work Management - FireBase/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Work Management - FireBase/build" />
+      <excludeFolder url="file://$MODULE_DIR$/Main Application/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/Main Application/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Main Application/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management/build" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled1/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled1/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/untitled1/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/titled/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/titled/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/titled/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/Main LogInPage/build" />
+      <excludeFolder url="file://$MODULE_DIR$/Main LogInPage/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/Main LogInPage/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management - FireBase/build" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management - FireBase/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/PAMS_NFT/Work Management - FireBase/.dart_tool" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

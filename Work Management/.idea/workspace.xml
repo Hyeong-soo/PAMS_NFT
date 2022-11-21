@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f35ab7a-4e58-48ae-a6dc-b22f82cdf0a7" name="Changes" comment="" />
+    <list default="true" id="3f35ab7a-4e58-48ae-a6dc-b22f82cdf0a7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../PAMS_NFT" beforeDir="false" afterPath="$PROJECT_DIR$/../PAMS_NFT" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/lib/InformationPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/lib/InformationPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInForm.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInForm.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInTabs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/lib/LogInTabs.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../UGRP Main Application/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../UGRP Main Application/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -65,7 +65,7 @@ class _Home_Page_State extends State<Home_Page>{
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Column(
                 children: <Widget>[

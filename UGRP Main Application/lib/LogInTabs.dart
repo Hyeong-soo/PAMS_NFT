@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'MainPage.dart';
 
 class  LogInTabs extends StatefulWidget {
   LogInTabs({this.onTabChanged});
@@ -9,7 +10,7 @@ class  LogInTabs extends StatefulWidget {
 }
 
 class _LogInTabsState extends State<LogInTabs> {
-  int _selectedTab = 0;
+  int _selectedTab = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +18,21 @@ class _LogInTabsState extends State<LogInTabs> {
       child: GestureDetector(
         onTap: () {
           setState(() {
-            _selectedTab = _selectedTab == 1 ? 0 : 1;
+            _selectedTab *= 2;
+            if(_selectedTab >= 4)
+              {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainPage()),
+                );
+              }
             widget.onTabChanged!(_selectedTab);
+            print(_selectedTab);
           });
         },
-        child: Container(
-          margin: const EdgeInsets.all(32),
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(60),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              tabButton(
-                "Naming",
-                _selectedTab == 0 ? true : false,
-              ),
-              tabButton(
-                "Information",
-                _selectedTab == 0 ? false : true,
-              ),
-            ],
-          ),
+        child: tabButton(
+          _selectedTab == 1 ? "Next Page" : "Finish",
+          _selectedTab == 1 ? true : false,
         ),
       ),
     );
@@ -52,17 +43,24 @@ class _LogInTabsState extends State<LogInTabs> {
     return AnimatedContainer(
       duration: Duration(milliseconds: 1000),
       curve: Curves.fastLinearToSlowEaseIn,
-      padding: const EdgeInsets.all(16),
+      width: 320,
+      height: 54,
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFFCD0051).withAlpha(selected ? 20 : 0),
-        borderRadius: BorderRadius.circular(60),
+        color: Color(0xFFCD0051),
+        //color: Color(0xFFCD0051).withAlpha(selected ? 20 : 0),
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Text(
-        text ?? "Button",
-        style: TextStyle(
-          color: selected ? Color(0xFFCD0051) : Colors.black,
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
+      child: Center(
+        child: Text(
+          text ?? "Button",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
