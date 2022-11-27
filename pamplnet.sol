@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; //ERC721 상속 받아 tokenId 에 uri 맵핑 추가한 lib
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; //ERC721 상속 받아 tokenId 에 uri 맵핑 추가한 lib
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract PamPlNet is ERC721URIStorage, Ownable {
+contract PamPlNet is ERC721, Ownable {
 
     //owner() pubilc view : 관리자 address 반환 (Ownable.sol)
 	//_owner private: 관리자 address (Ownable.sol)
@@ -21,11 +21,13 @@ contract PamPlNet is ERC721URIStorage, Ownable {
 	constructor() ERC721("PamPlNet", "PPN") {}
 
 	struct tokenInfo {
+		uint256 id;
 		string name;
 		uint256 generateTime; //nft 생성 시간
 		uint32 pamPoint; 
 		uint8 kind; //활동이 어떤 종류인지 (예: 1: 동아리 ,2: 대회, 3: 학과, 4: 밈 토큰 등등)
 		bool saleable; //판매 가능 여부
+		string tokenURI; //nft picture address
 	}
 
 	tokenInfo[] public tokens; //Token 배열
@@ -35,9 +37,10 @@ contract PamPlNet is ERC721URIStorage, Ownable {
         string memory _name,
         uint32 _pamPoint,
         uint8 _kind,
-		bool _saleable
+		bool _saleable,
+		string memory _tokenURI
 		) private onlyOwner {
-		tokens.push( tokenInfo( _name, block.timestamp, _pamPoint, _kind, _saleable));
+		tokens.push( tokenInfo( tokens.length , _name, block.timestamp, _pamPoint, _kind, _saleable, _tokenURI));
 	}
 
 
@@ -47,15 +50,14 @@ contract PamPlNet is ERC721URIStorage, Ownable {
         uint32 _pamPoint,
         uint8 _kind,
 		bool _saleable,
-		string memory tokenURI,
+		string memory _tokenURI,
         address[] memory _studentList
         ) public onlyOwner {
 
 		for( uint32 i = 0; i< _studentList.length ; i++ )
 		{	
-			_createToken( _name, _pamPoint, _kind, _saleable ); //tokens 배열에 정보 추가
-			_mint( _studentList[i] , totalCount.current() ); //토큰 id와 address mapping
-			_setTokenURI( totalCount.current(), tokenURI); //토큰 id와 URI mapping
+			_createToken( _name, _pamPoint, _kind, _saleable, _tokenURI); //tokens 배열에 정보 추가
+			_mint( _studentList[i] , tokens.length -1 ); //토큰 id와 address mapping
 			totalCount.increment();
 		}
     }
@@ -67,11 +69,11 @@ contract PamPlNet is ERC721URIStorage, Ownable {
 		uint8 _kind,
 		bool _saleable,
 		address _owner,
-		string memory tokenURI) public onlyOwner
+		string memory _tokenURI
+		) public onlyOwner
 	{
-		_createToken(_name, _pamPoint, _kind, _saleable );
-		_mint( _owner , totalCount.current() );
-		_setTokenURI( totalCount.current() , tokenURI);
+		_createToken(_name, _pamPoint, _kind, _saleable, _tokenURI);
+		_mint( _owner , tokens.length -1 );
 		totalCount.increment();
 	}
 
@@ -86,23 +88,37 @@ contract PamPlNet is ERC721URIStorage, Ownable {
     }
 	
 	//dev@ address가 소유한 token들의 id 리스트 반환
-	function getTokensbyOwner(address _owner) public view returns(uint32[] memory) {
+	function getIdsbyOwner(address _owner) public view returns(uint32[] memory) {
 		require( balanceOf(_owner) != 0, "Owner did not have token.");
 		
 		uint cnt =0;
 		uint32[] memory idList = new uint32[]( balanceOf(_owner) );
-		for(uint32 i =0 ; i< totalCount.current(); i++){
-			if( ownerOf(i) == _owner ) {
+		for(uint32 i =0 ; i< tokens.length ; i++){
+			if( _ownerOf(i) == _owner ) {
 				idList[cnt++] = i;
 			}
 		}
 		return idList;
 	}
 
+	//dev@ address가 소유한 token 정보 반환
+	function getTokensbyOwner(address _owner) public view returns(tokenInfo[] memory) {
+		require( balanceOf(_owner) != 0, "Owner did not have token.");
+		
+		uint cnt =0;
+		tokenInfo[] memory tokenList = new tokenInfo[]( balanceOf(_owner) );
+		for(uint32 i =0 ; i< tokens.length ; i++){
+			if( _ownerOf(i) == _owner ) {
+				tokenList[cnt++] = tokens[i];
+			}
+		}
+		return tokenList;
+	}
+
 	//dev@ address가 가진 nft들의 pamPoint 총합 반환 
 	function getTotalPoint(address _owner) external view returns( uint32 totalPoint) {
 
-		uint32[] memory idList = getTokensbyOwner(_owner);
+		uint32[] memory idList = getIdsbyOwner(_owner);
 		for( uint32 i =0 ; i< balanceOf(_owner) ; i++ ){
 			totalPoint += tokens[ idList[i] ].pamPoint;
 		}
@@ -110,6 +126,14 @@ contract PamPlNet is ERC721URIStorage, Ownable {
 		return totalPoint;
 	}
 
+	//dev@ 토큰 삭제
+	function burn(uint256 _tokenId) public onlyOwner
+    {
+		require(tokenPrice[_tokenId] == 0, "This NFT is saling.");
+		delete tokens[_tokenId];
+		totalCount.decrement();
+        _burn(_tokenId);
+    }
 
 	
 	/*
@@ -185,10 +209,4 @@ contract PamPlNet is ERC721URIStorage, Ownable {
         return tokenPrice[_tokenId];
     }
 
-	//dev@ 토큰 삭제
-	function burn(uint256 _tokenId) public onlyTokenOwner(_tokenId)
-    {
-		require(tokenPrice[_tokenId] == 0, "This NFT is saling.");
-        _burn(_tokenId);
-    }
 }
