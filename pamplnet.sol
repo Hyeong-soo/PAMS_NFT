@@ -2,10 +2,11 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; //ERC721 상속 받아 tokenId 에 uri 맵핑 추가한 lib
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; //ERC721 상속 받아 tokenId 에 uri 맵핑 추가한 lib
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract PamPlNet is ERC721, Ownable {
+contract PamPlNet is ERC721URIStorage, Ownable{
 
     //owner() pubilc view : 관리자 address 반환 (Ownable.sol)
 	//_owner private: 관리자 address (Ownable.sol)
@@ -14,6 +15,9 @@ contract PamPlNet is ERC721, Ownable {
 	//ownerOf(uint32 tokenId) pubilc view: token_id to owner mapping (ERC721)
 	//balanceOf(address Owner) public view: Owner의 nft 개수 return (ERC721)
 	
+    //_setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual: nft의 개수가 고정이 아닐때, baseURI의 방식 대신 사용
+    //tokenURI(uint256 tokenId) public view: baseURI와 tokenID를 받아 json 파일의 ipfs 주소의 URI를 읽어온다.
+
 	using Counters for Counters.Counter;
 
 	Counters.Counter totalCount; //발행된 총 NFT 개수
@@ -21,61 +25,80 @@ contract PamPlNet is ERC721, Ownable {
 	constructor() ERC721("PamPlNet", "PPN") {}
 
 	struct tokenInfo {
-		uint256 id;
-		string name;
-		uint256 generateTime; //nft 생성 시간
-		uint32 pamPoint; 
-		uint8 kind; //활동이 어떤 종류인지 (예: 1: 동아리 ,2: 대회, 3: 학과, 4: 밈 토큰 등등)
+        uint id;
+		uint32 pamPoint;
 		bool saleable; //판매 가능 여부
-		string tokenURI; //nft picture address
 	}
 
 	tokenInfo[] public tokens; //Token 배열
 
 	//dev@ 토큰 생성
 	function _createToken(
-        string memory _name,
         uint32 _pamPoint,
-        uint8 _kind,
-		bool _saleable,
-		string memory _tokenURI
+        bool _saleable,
+        string memory _tokenURI
 		) private onlyOwner {
-		tokens.push( tokenInfo( tokens.length , _name, block.timestamp, _pamPoint, _kind, _saleable, _tokenURI));
+		
+         _setTokenURI( tokens.length , _tokenURI);
+        tokens.push( tokenInfo( tokens.length,  _pamPoint, _saleable) );
 	}
 
 
-	//dev@ 학생 리스트를 받아 단체로 토큰 생성 및 민팅(동아리, 학과, 단체 전용 함수)
-	function mintTeamToken(
-        string memory _name,
-        uint32 _pamPoint,
-        uint8 _kind,
-		bool _saleable,
-		string memory _tokenURI,
-        address[] memory _studentList
-        ) public onlyOwner {
-
-		for( uint32 i = 0; i< _studentList.length ; i++ )
-		{	
-			_createToken( _name, _pamPoint, _kind, _saleable, _tokenURI); //tokens 배열에 정보 추가
-			_mint( _studentList[i] , tokens.length -1 ); //토큰 id와 address mapping
-			totalCount.increment();
-		}
-    }
-
-	//dev@ 개인 토큰을 생성하는 함수
+    //dev@ 1명에게 1개 민팅
 	function mintToken(
-		string memory _name,
-		uint32 _pamPoint,
-		uint8 _kind,
-		bool _saleable,
-		address _owner,
+        address _owner,
+        uint32 _pamPoint,
+        bool _saleable,
 		string memory _tokenURI
 		) public onlyOwner
 	{
-		_createToken(_name, _pamPoint, _kind, _saleable, _tokenURI);
-		_mint( _owner , tokens.length -1 );
+        _mint( _owner , tokens.length);
+		_createToken(_pamPoint, _saleable, _tokenURI);
 		totalCount.increment();
 	}
+
+    //dev@ 1명에게 n개 민팅
+	function mintTokens(
+        address _owner,
+        uint32 _pamPoint,
+        bool _saleable,
+		string memory _baseURI,
+        uint32 count
+		) public onlyOwner
+	{
+        string memory tokenURI;
+        for(uint i=0; i< count; i++)
+        {   
+            _mint( _owner , tokens.length);
+
+            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i) , ".json"));
+
+		    _createToken(_pamPoint, _saleable, tokenURI);
+		    totalCount.increment();
+        }
+	}
+
+	//dev@ 학생 리스트를 받아 단체로 토큰 생성 및 민팅(동아리, 학과, 단체 전용 함수)
+	function mintTeamToken(
+        address[] memory _studentList,
+        uint32 _pamPoint,
+        bool _saleable,
+		string memory _baseURI,
+        uint32 count
+        ) public onlyOwner {
+        
+        require( _studentList.length == count, "error: count error");
+        
+        string memory tokenURI;
+
+		for( uint32 i = 0; i< count ; i++ )
+		{	
+            _mint( _studentList[i] , tokens.length);
+            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i) , ".json"));
+		    _createToken( _pamPoint, _saleable, tokenURI);
+		    totalCount.increment();
+		}
+    }
 
 	//dev@ 발행된 총 NFT 개수 반환
 	function getTotalCount() external view returns(uint256) {
@@ -115,6 +138,20 @@ contract PamPlNet is ERC721, Ownable {
 		return tokenList;
 	}
 
+    //dev@ address가 소유한 token들의 id 리스트 반환
+	function getURIsbyOwner(address _owner) public view returns(string[] memory) {
+		require( balanceOf(_owner) != 0, "Owner did not have token.");
+		
+		uint cnt =0;
+		string[] memory URIList = new string[]( balanceOf(_owner) );
+		for(uint32 i =0 ; i< tokens.length ; i++){
+			if( _ownerOf(i) == _owner ) {
+				URIList[cnt++] = tokenURI(i);
+			}
+		}
+		return URIList;
+	}
+
 	//dev@ address가 가진 nft들의 pamPoint 총합 반환 
 	function getTotalPoint(address _owner) external view returns( uint32 totalPoint) {
 
@@ -124,6 +161,12 @@ contract PamPlNet is ERC721, Ownable {
 		}
 
 		return totalPoint;
+	}
+
+	//@dev tokenURI 변경
+	function setTokenURI( uint _tokenId, string memory _tokenURI) public onlyOwner
+	{
+		_setTokenURI( _tokenId, _tokenURI);
 	}
 
 	//dev@ 토큰 삭제
