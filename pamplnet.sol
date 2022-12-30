@@ -18,6 +18,7 @@ contract PamPlNet is ERC721URIStorage, Ownable{
     //_setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual: nft의 개수가 고정이 아닐때, baseURI의 방식 대신 사용
     //tokenURI(uint256 tokenId) public view: baseURI와 tokenID를 받아 json 파일의 ipfs 주소의 URI를 읽어온다.
 
+
 	using Counters for Counters.Counter;
 
 	Counters.Counter totalCount; //발행된 총 NFT 개수
@@ -26,7 +27,6 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 
 	struct tokenInfo {
         uint id;
-		uint32 pamPoint;
 		bool saleable; //판매 가능 여부
 	}
 
@@ -34,33 +34,30 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 
 	//dev@ 토큰 생성
 	function _createToken(
-        uint32 _pamPoint,
         bool _saleable,
         string memory _tokenURI
 		) private onlyOwner {
 		
          _setTokenURI( tokens.length , _tokenURI);
-        tokens.push( tokenInfo( tokens.length,  _pamPoint, _saleable) );
+        tokens.push( tokenInfo( tokens.length, _saleable) );
 	}
 
 
     //dev@ 1명에게 1개 민팅
 	function mintToken(
         address _owner,
-        uint32 _pamPoint,
         bool _saleable,
 		string memory _tokenURI
 		) public onlyOwner
 	{
         _mint( _owner , tokens.length);
-		_createToken(_pamPoint, _saleable, _tokenURI);
+		_createToken(_saleable, _tokenURI);
 		totalCount.increment();
 	}
 
     //dev@ 1명에게 n개 민팅
 	function mintTokens(
         address _owner,
-        uint32 _pamPoint,
         bool _saleable,
 		string memory _baseURI,
         uint32 count
@@ -73,7 +70,7 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 
             tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i) , ".json"));
 
-		    _createToken(_pamPoint, _saleable, tokenURI);
+		    _createToken(_saleable, tokenURI);
 		    totalCount.increment();
         }
 	}
@@ -81,7 +78,6 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 	//dev@ 학생 리스트를 받아 단체로 토큰 생성 및 민팅(동아리, 학과, 단체 전용 함수)
 	function mintTeamToken(
         address[] memory _studentList,
-        uint32 _pamPoint,
         bool _saleable,
 		string memory _baseURI,
         uint32 count
@@ -94,8 +90,8 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 		for( uint32 i = 0; i< count ; i++ )
 		{	
             _mint( _studentList[i] , tokens.length);
-            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i) , ".json"));
-		    _createToken( _pamPoint, _saleable, tokenURI);
+            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i), ".json"));
+		    _createToken( _saleable, tokenURI);
 		    totalCount.increment();
 		}
     }
@@ -152,7 +148,13 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 		return URIList;
 	}
 
-	//dev@ address가 가진 nft들의 pamPoint 총합 반환 
+	function transfer(address _from, address _to, uint _tokenId) public onlyOwner
+	{
+		_transfer(_from, _to, _tokenId);
+	}
+
+	//dev@ address가 가진 nft들의 pamPoint 총합 반환
+	/*
 	function getTotalPoint(address _owner) external view returns( uint32 totalPoint) {
 
 		uint32[] memory idList = getIdsbyOwner(_owner);
@@ -162,6 +164,7 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 
 		return totalPoint;
 	}
+	*/
 
 	//@dev tokenURI 변경
 	function setTokenURI( uint _tokenId, string memory _tokenURI) public onlyOwner
@@ -251,5 +254,4 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 		require(tokenPrice[_tokenId] != 0, "This NFT is not saling.");
         return tokenPrice[_tokenId];
     }
-
 }
