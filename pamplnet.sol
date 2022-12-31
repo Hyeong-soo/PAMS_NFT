@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; /
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract PamPlNet is ERC721URIStorage, Ownable{
+contract PamPlNet_TEST is ERC721URIStorage, Ownable{
 
     //owner() pubilc view : 관리자 address 반환 (Ownable.sol)
 	//_owner private: 관리자 address (Ownable.sol)
@@ -23,7 +23,7 @@ contract PamPlNet is ERC721URIStorage, Ownable{
 
 	Counters.Counter totalCount; //발행된 총 NFT 개수
 
-	constructor() ERC721("PamPlNet", "PPN") {}
+	constructor() ERC721("PamPlNet_TEST", "PPN") {}
 
 	struct tokenInfo {
         uint id;
@@ -60,15 +60,16 @@ contract PamPlNet is ERC721URIStorage, Ownable{
         address _owner,
         bool _saleable,
 		string memory _baseURI,
-        uint32 count
+        uint32 _startId,
+		uint32 _count
 		) public onlyOwner
 	{
         string memory tokenURI;
-        for(uint i=0; i< count; i++)
+        for(uint i= 0 ; i< _count ; i++)
         {   
             _mint( _owner , tokens.length);
 
-            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i) , ".json"));
+            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(_startId+i) , ".json"));
 
 		    _createToken(_saleable, tokenURI);
 		    totalCount.increment();
@@ -80,17 +81,18 @@ contract PamPlNet is ERC721URIStorage, Ownable{
         address[] memory _studentList,
         bool _saleable,
 		string memory _baseURI,
-        uint32 count
+        uint32 _startId,
+		uint32 _count
         ) public onlyOwner {
         
-        require( _studentList.length == count, "error: count error");
+        require( _studentList.length == _count, "error: count error");
         
         string memory tokenURI;
 
-		for( uint32 i = 0; i< count ; i++ )
+		for( uint32 i = 0; i< _count ; i++ )
 		{	
             _mint( _studentList[i] , tokens.length);
-            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString(i), ".json"));
+            tokenURI = string(abi.encodePacked( _baseURI, Strings.toString( _startId + i ), ".json"));
 		    _createToken( _saleable, tokenURI);
 		    totalCount.increment();
 		}
@@ -249,9 +251,11 @@ contract PamPlNet is ERC721URIStorage, Ownable{
     }
 
 	//dev@ 토큰의 가격을 반환하는 함수
+	/*
     function getPrice(uint256 _tokenId) view public returns(uint256)
     {
 		require(tokenPrice[_tokenId] != 0, "This NFT is not saling.");
         return tokenPrice[_tokenId];
     }
+	*/
 }
