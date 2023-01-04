@@ -9,6 +9,8 @@
   import 'package:firebase_messaging/firebase_messaging.dart';
   import 'package:get/get.dart';
 
+  Future<dynamic>? future_likenum;
+
   
   class AppController extends GetxController { // 푸시 알람
     static AppController get to => Get.find();
@@ -128,16 +130,18 @@
 
   ];
 
-  void setlikenum() async{ //likenum 정보 firestore에서 가져와서 업데이트해주는 함수
+  setlikenum() async{ //likenum 정보 firestore에서 가져와서 업데이트해주는 함수
 
       var heartlist = await FirebaseFirestore.instance.collection('Activity_Collection').get();
 
-      for(int i = 0; i < heartlist.docs.length; i++){
+      print(heartlist.docs.length);
+
+     /* for(int i = 0; i < heartlist.docs.length; i++){
 
         Map<String, dynamic> tempdata = heartlist.docs[i].data();
 
         int templike = tempdata['Like_Num'];
-        int temppart = tempdata['Participate'];
+        int temppart = tempdata['Participant'];
 
         print(templike); //디버깅용
         print(temppart);
@@ -146,6 +150,8 @@
         ParticipateList.add(temppart);
 
       }
+
+      */
   }
 
   void setimagepathlist() async{ //imagepath list를 생성하는 함수
@@ -374,8 +380,7 @@
     Build_Fifth_Class(Image.asset('assets/NFT_5.png')),
   ];
   
-  
-  
+
   class Home_Page extends StatefulWidget {
     @override
     State<Home_Page> createState() => _Home_PageState();
@@ -426,21 +431,39 @@
     @override
     Widget build(BuildContext context) {
 
-      setlikenum(); //build할 때 likenum 정보 가져오기
-      setimagepathlist(); //build할 때 imagepath 정보 가져오기
-      sethotlist(); //build할 때 second_list 채워넣기
+      future_likenum = setlikenum(); //build할 때 likenum 정보 가져오기
+      //future_imagepath = setimagepathlist(); //build할 때 imagepath 정보 가져오기
+      //sethotlist(); //build할 때 second_list 채워넣기
       //혹시 안되면 futurebuild로 하는 것도 생각해봐야 할듯?
 
       return Scaffold(
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          children: <Widget>[
-            _Build_First(),
-            _Build_Second(), // 가장 핫한 활동
-            _Build_Third(), // PAMS 비교과 활동
-            _Build_Fourth(), // 창업 & 공모전 Event
-           // _Build_Fifth(), (메인UI에서 NFT는 빼자고 해서)
-          ],
+        body: FutureBuilder<dynamic>(
+            future: future_likenum,
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                return ListView(
+                  scrollDirection: Axis.vertical,
+                  children: <Widget>[
+                    _Build_First(),
+                    _Build_Second(), // 가장 핫한 활동
+                    _Build_Third(), // PAMS 비교과 활동
+                    _Build_Fourth(), // 창업 & 공모전 Event
+                  ],
+                );
+              }
+              else if(snapshot.hasData == false)
+              {
+                return Center(child: CircularProgressIndicator(color: Color(0xFFCD0051)));
+              }
+              else if(snapshot.hasError)
+              {
+                return Center(child: CircularProgressIndicator());
+              }
+              else
+              {
+                return Center(child: CircularProgressIndicator());
+              }
+            }
         ),
       );
     }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'infolist.dart';
+
+Act thisact = Act.def(); //default 생성자로 생성
 
 class MyApp extends StatelessWidget
 {
@@ -18,7 +21,7 @@ class MyApp extends StatelessWidget
             ),
             darkTheme: ThemeData.dark(),
             themeMode: currentMode,
-            home: actinfo(),
+            home: thisact,
             debugShowCheckedModeBanner: false,
           );
         }
@@ -27,12 +30,92 @@ class MyApp extends StatelessWidget
 }
 
 
+void imagetoactinfo(String path){ //image를 눌렀을 때 그 이미지에 맞는 actinfo를 가져오는 함수
+
+  var tempact = Act.def();
+
+  for(int i = 0; i< allactlist.length; i++){
+
+    if(path == allactlist[i]['image_path']){
+
+      var curact = allactlist[i];
+
+      tempact.activity_name = curact['activity_name'];
+      tempact.application_available = curact['application_available']; //활동 이름
+      tempact.application_period = curact['application_period']; //시작 날짜
+      tempact.category = curact['category'];
+      tempact.email = curact['e-mail'];
+      tempact.participating_grade = curact['participating_grade'];
+      tempact.operation_department = curact['operation_department'];
+      tempact.operation_period = curact['operation_period'];
+      tempact.image_path = curact['image_path'];
+      tempact.PAM = int.parse(curact['pam']);
+
+      break;
+
+    }
+
+
+  }
+  Act.copy(tempact); //복사 생성자 호출 및 widget 빌드
+
+}
+
+
 class actinfo extends StatefulWidget {
+
+  //class 안에 불필요하게 act를 다 집어넣는것보다는, 전역변수로 thisact 변수를 선언해서 이를 활용하는 방식이 나을 듯. 그렇게 수정했음 (아래는 수정 전 버전임)
+
+  /*
+  String? activity_name; //활동 유형
+  String? application_available; //활동 이름
+  String? application_period; //시작 날짜
+  String? category;
+  String? email;
+  String? participating_grade;
+  String? operation_department;
+  String? operation_period;
+  String? image_path;
+  int? PAM;
+
+  */
+
+  actinfo(Act act){ //값 넣어주기
+
+    /*
+
+    this.activity_name = act.activity_name;
+    this.application_available = act.application_available;
+    this.application_period = act.application_period;
+    this.category= act.category;
+    this.email = act.email;
+    this.participating_grade= act.participating_grade;
+    this.operation_department = act.operation_department;
+    this.image_path = act.image_path;
+    this.PAM = act.PAM;
+
+     */
+
+    //act 값을 가져와서 전역변수 thisact를 initialize 해줌
+
+    thisact.activity_name = act.activity_name;
+    thisact.application_available = act.application_available;
+    thisact.application_period = act.application_period;
+    thisact.category= act.category;
+    thisact.email = act.email;
+    thisact.participating_grade= act.participating_grade;
+    thisact.operation_department = act.operation_department;
+    thisact.image_path = act.image_path;
+    thisact.PAM = act.PAM;
+
+  }
+
   @override
   _actinfoState createState() => _actinfoState();
 }
 
 class _actinfoState extends State<actinfo> {
+
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -106,7 +189,8 @@ class _actinfoState extends State<actinfo> {
                         width: Factor_Width * 33
                       ),
                       Text(
-                        '#진행중 #공모전/경진대회',
+                         //'#' + thisact.widget.application_available! + ' #' + this.widget.category!,
+                        '#' + thisact.application_available! + ' #' + thisact.category!,
                         style: TextStyle(
                           fontSize: 25.5 * Factor_Height,
                           fontFamily: 'Spoqa-Bold',
@@ -124,9 +208,10 @@ class _actinfoState extends State<actinfo> {
                   //활동 사진 들어갈 곳
                   height: 254 * Factor_Height,
                   child: Image.asset(
-                    'assets/actlogo.png',
+                    //this.widget.image_path!,
+                    thisact.image_path!,
                     height: 254 * Factor_Height,
-                    width: 396 * Factor_Height,
+                    width: 296 * Factor_Width,
                   ),
                 ),
                 Container(
@@ -135,7 +220,8 @@ class _actinfoState extends State<actinfo> {
                 Container(
                   height: 80 * Factor_Height,
                   child: Text(
-                    '2022 UGRP 학부생\n연구 프로그램',
+                    //this.widget.activity_name!,
+                    thisact.activity_name!,
                     style: TextStyle(
                       fontSize: 32 * Factor_Height,
                       fontFamily: 'Spoqa-Bold',
@@ -177,7 +263,8 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '2022-11-07 ~ 2022-12-02',
+                                //this.widget.application_period!,
+                                thisact.application_period!,
                                 style: TextStyle(
                                   fontSize: 17.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Regular',
@@ -227,7 +314,8 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '2022-11-07 ~ 2022-12-04',
+                                //this.widget.operation_period!,
+                                thisact.operation_period!,
                                 style: TextStyle(
                                   fontSize: 17.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Regular',
@@ -276,7 +364,8 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '전 학년',
+                                //this.widget.participating_grade!,
+                                thisact.participating_grade!,
                                 style: TextStyle(
                                   fontSize: 17.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Regular',
@@ -307,7 +396,7 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '담당자',
+                                '담당 기관',
                                 style: TextStyle(
                                   fontSize: 24.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Bold',
@@ -325,7 +414,8 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '이나라',
+                                //this.widget.operation_department!,
+                                thisact.operation_department!,
                                 style: TextStyle(
                                   fontSize: 17.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Regular',
@@ -344,6 +434,7 @@ class _actinfoState extends State<actinfo> {
                 Container(
                   height: 40 * Factor_Height,
                 ),
+                /*
                 Container(
                   height: 83 * Factor_Height, //"연락처"
                   child: Column(
@@ -393,6 +484,7 @@ class _actinfoState extends State<actinfo> {
                 Container(
                   height: 40 * Factor_Height,
                 ),
+                */
                 Container(
                   height: 83 * Factor_Height, //"이메일"
                   child: Column(
@@ -405,7 +497,7 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                '이메일',
+                                '연락처',
                                 style: TextStyle(
                                   fontSize: 24.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Bold',
@@ -423,7 +515,8 @@ class _actinfoState extends State<actinfo> {
                                 width: 33 * Factor_Width,
                               ),
                               Text(
-                                'everydaynara@postech.ac.kr',
+                                //this.widget.email!,
+                                thisact.email!,
                                 style: TextStyle(
                                   fontSize: 17.5 * Factor_Height,
                                   fontFamily: 'Spoqa-Regular',

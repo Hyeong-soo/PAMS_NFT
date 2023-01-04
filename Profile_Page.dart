@@ -23,6 +23,7 @@ String? URL;
 String? NickName_Split;
 String? NickName = '';
 String? introduce = '';
+String? Profile_path = 'default_profile.png';
 
 List<dynamic> schoolact = [] as List<dynamic>;
 List<dynamic> snamelist = [] as List<dynamic>;
@@ -39,7 +40,6 @@ List<dynamic> enamelist = [] as List<dynamic>;
 List<dynamic> NFT_Information = [3, 'THE_GENESIS', 0, 20220907, 20221225, '생활자치회', '금상', 9999, 0];
 List<dynamic> NFT_Information_2 = [2, '차은성 바보', 0, 20220907, 20221225, '신상현', '멍청이', 999, 0];
 List<dynamic> NFT = [] as List<dynamic>;
-
 
 
 class Profile_Page extends StatefulWidget {
@@ -61,8 +61,7 @@ class _Profile_PageState extends State<Profile_Page>
     NickName = await storage.read(key: "NickName");
     NickName_Split = NickName!.split(" ")[1];
 
-
-    var docsnapshot = await FirebaseFirestore.instance.collection('users').doc(URL).get(); //하태혁의 주소
+    var docsnapshot = await FirebaseFirestore.instance.collection('users').doc(URL).get();
 
     Map<String, dynamic> data = docsnapshot.data() as Map<String, dynamic>;
 
@@ -310,7 +309,7 @@ class _Profile_PageState extends State<Profile_Page>
                     sides: 6,
                     borderRadius: 15.0, // Default 0.0 degrees
                     rotate: 90.0, // Default 0.0 degrees
-                    child: Image.asset('assets/NFT_1.png',
+                    child: Image.asset(Profile_path!,
                         height: 91 * Factor_Height, width: 91 * Factor_Height),
                   ),
                   decoration: ShapeDecoration(
@@ -563,7 +562,6 @@ class _Profile_PageState extends State<Profile_Page>
     final Factor_Height = deviceHeight / standardDeviceHeight;
 
 
-    // var act_num = snamelist.length + cnamelist.length + vnamelist.length + enamelist.length; // 전체 활동 개수
     return ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
