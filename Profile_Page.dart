@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
+
 Future<dynamic>? future_profile;
 Future<dynamic>? future_activity;
 
@@ -22,8 +23,8 @@ String? major_image;
 String? URL;
 String? NickName_Split;
 String? NickName = '';
-String? introduce = '';
 String? Profile_path = 'default_profile.png';
+String? introduce = '';
 
 List<dynamic> schoolact = [] as List<dynamic>;
 List<dynamic> snamelist = [] as List<dynamic>;
