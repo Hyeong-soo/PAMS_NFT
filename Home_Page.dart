@@ -639,16 +639,6 @@ class _Home_PageState extends State<Home_Page> {
                 child: Image.asset('assets/Home_Page_Fire.png'),
               ),
               Spacer(),
-              Container(
-                width: 19 * Factor_Width,
-                child: GestureDetector
-                  (
-                  child: Image.asset('assets/Home_Page_Arrow.png'),
-                  onTap: (){
-
-                  },
-                ),
-              ),
             ],
           ),
         ),
@@ -674,7 +664,7 @@ class _Home_PageState extends State<Home_Page> {
                   return Container(
                     //margin: EdgeInsets.symmetric(horizontal: 24.0 * Factor_Width),
                     //width: MediaQuery.of(context).size.width,
-                    child: GestureDetector( //프로필 편집 버튼
+                    child: GestureDetector(
                       onTap: () {
                         //print("111111111111111111");
                         imagetoactinfo(Second_List[i].path!);
@@ -2263,6 +2253,11 @@ class _Home_PageState extends State<Home_Page> {
                   (
                   child: Image.asset('assets/Home_Page_Arrow.png'),
                   onTap: (){
+
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(builder:
+                            (context) => extralisttabbar()));
 
                   },
                 ),
