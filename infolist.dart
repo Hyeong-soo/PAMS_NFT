@@ -22,7 +22,6 @@ makeactlist() async {
       .collection('UGRP')
       .get(); //활동 list query 가져오기
 
-
   print(tempact.docs.length);
 
   for (int i = 0; i < tempact.docs.length; i++) { // 활동 넣고, 운영 중 / 신청 가능 / 종료된 활동으로 분류하기
@@ -43,9 +42,9 @@ makeactlist() async {
       'image_path' : temp['image_path'] // 활동 이미지 경로
     });
 
-    if (allactlist[i]['aplication_available'] == '운영중') nowactlist.add(allactlist[i]); // 운영 중일 경우
-    else if (allactlist[i]['aplication_available'] == '신청가능') availableactlist.add(allactlist[i]); // 신청 가능한 경우
-    else endedactlist.add(endedactlist[i]); // 종료된 경우
+    if (allactlist[i]['application_available'] == '운영중') nowactlist.add(allactlist[i]); // 운영 중일 경우
+    else if (allactlist[i]['application_available'] == '신청가능') availableactlist.add(allactlist[i]); // 신청 가능한 경우
+    else endedactlist.add(allactlist[i]); // 종료된 경우
 
   }
 
@@ -61,6 +60,7 @@ makeactlist() async {
       'activity_name': temp['activity_name'], // 활동 이름
       'application_link': temp['application_link'], // 지원 링크
       'detail_link': temp['detail_link'], // 상세정보 링크
+      'image_path' : temp['image_path'] // 활동 이미지 경로
     });
   }
 
