@@ -13,8 +13,6 @@ Future<dynamic>? future_likenum;
 
 int i = 0;
 
-
-
 class AppController extends GetxController { // 푸시 알람
   static AppController get to => Get.find();
 
@@ -217,7 +215,7 @@ setimagepathlist() async{ //imagepath list를 생성하는 함수
 sethotlist() {
   for(int i = 0; i< 5; i++){
 
-    Second_List.add(Build_Second_Class(Image.asset('assets/'+ImagepathList[attentionrank[i]]), ImagepathList[attentionrank[i]]));
+    Second_List.add(Build_Second_Class(Image.asset('assets/'+ImagepathList[attentionrank[i]], alignment: Alignment.center,), ImagepathList[attentionrank[i]]));
     print(Second_List);
 
   }
@@ -464,26 +462,18 @@ class _Home_PageState extends State<Home_Page> {
   }
 
   @override
-  void initState(){
-
-    future_likenum = _asyncMethod();
-    super.initState();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: FutureBuilder<dynamic>(
-          future: future_likenum,
+      body: i == 0 ? FutureBuilder<dynamic>(
+          future: _asyncMethod(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if(snapshot.hasData)
             {
               print("!1111111111111111111111111111");
+              i++;
               sortbyattention();
               sethotlist();
-
               return ListView(
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
@@ -507,6 +497,14 @@ class _Home_PageState extends State<Home_Page> {
               return Center(child: CircularProgressIndicator());
             }
           }
+      ) : ListView(
+        scrollDirection: Axis.vertical,
+        children: <Widget>[
+          _Build_First(),
+          _Build_Second(), // 가장 핫한 활동
+          _Build_Third(), // PAMS 비교과 활동
+          _Build_Fourth(), // 창업 & 공모전 Event
+        ],
       ),
     );
 
@@ -678,13 +676,33 @@ class _Home_PageState extends State<Home_Page> {
                     //width: MediaQuery.of(context).size.width,
                     child: GestureDetector( //프로필 편집 버튼
                       onTap: () {
+                        //print("111111111111111111");
                         imagetoactinfo(Second_List[i].path!);
                       },
                       child: Container(
                         height: 30 * Factor_Height,
                         margin: EdgeInsets.symmetric(horizontal: 18.0 * Factor_Width),
-                        child: Container(
-                          child: Second_List[i].ImagePath,
+                        child: Stack(
+                            children: [
+                              Container(child: Container(child: Image.asset('assets/'+Second_List[i].path!, fit: BoxFit.fill,),),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                ),
+                              ),
+                              Container(child: Container(child: Image.asset('assets/'+Second_List[i].path!, fit: BoxFit.fill,),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 0.25),
+                                      offset: Offset(3.0, 3.0), //(x,y)
+                                      blurRadius: 4.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ),
+                            ]
                         ),
                       ),
                     ),
@@ -752,7 +770,7 @@ class _Home_PageState extends State<Home_Page> {
                   (
                   child: Image.asset('assets/Home_Page_Arrow.png'),
                   onTap: (){
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         CupertinoPageRoute(builder:
                             (context) => infolisttabbar()));

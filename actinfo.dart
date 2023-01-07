@@ -34,8 +34,11 @@ void imagetoactinfo(String path){ //image를 눌렀을 때 그 이미지에 맞�
 
   var tempact = Act.def();
 
+  if(allactlist.length==0) makeactlist(); // allactlist가 만들어지기 전에 함수를 호출한 경우 for문이 안돌아감
+
   for(int i = 0; i< allactlist.length; i++){
 
+    //print("!111111111111111");
     if(path == allactlist[i]['image_path']){
 
       var curact = allactlist[i];
@@ -186,10 +189,10 @@ class _actinfoState extends State<actinfo> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        width: Factor_Width * 33
+                          width: Factor_Width * 33
                       ),
                       Text(
-                         //'#' + thisact.widget.application_available! + ' #' + this.widget.category!,
+                        //'#' + thisact.widget.application_available! + ' #' + this.widget.category!,
                         '#' + thisact.application_available! + ' #' + thisact.category!,
                         style: TextStyle(
                           fontSize: 25.5 * Factor_Height,
@@ -276,7 +279,7 @@ class _actinfoState extends State<actinfo> {
                       Container(height: 10 * Factor_Height),
                       Container(
                           child:
-                              Divider(color: Color(0XFFCFCFCF), indent: 28, endIndent: 28, thickness: 2.0))
+                          Divider(color: Color(0XFFCFCFCF), indent: 28, endIndent: 28, thickness: 2.0))
                       ,
                     ],
                   ),
@@ -582,7 +585,7 @@ class _actinfoState extends State<actinfo> {
         ),
       ),
 
-    //  ),
+      //  ),
     );
   }
 }

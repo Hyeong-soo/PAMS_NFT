@@ -7,15 +7,6 @@ var firestore = FirebaseFirestore.instance;
 
 Future<dynamic>? future_actlist;
 
-class infolisttabbar extends StatefulWidget {
-  const infolisttabbar({Key? key}) : super(key: key);
-
-
-  @override
-  _infolisttabbarState createState() => _infolisttabbarState();
-}
-
-
 List <Map<String, dynamic>> allactlist = [];
 List <Map<String, dynamic>> availableactlist = []; // 신청 가능한 리스트
 List <Map<String, dynamic>> nowactlist = []; // 운영 중인 리스트
@@ -24,9 +15,15 @@ List <Map<String, dynamic>> extraactlist = []; // 외부 활동 리스트
 
 makeactlist() async {
 
+  allactlist.clear();
+  extraactlist.clear();
+
   var tempact = await FirebaseFirestore.instance
       .collection('UGRP')
       .get(); //활동 list query 가져오기
+
+
+  print(tempact.docs.length);
 
   for (int i = 0; i < tempact.docs.length; i++) { // 활동 넣고, 운영 중 / 신청 가능 / 종료된 활동으로 분류하기
     Map<String, dynamic> temp = tempact.docs[i].data();
@@ -36,11 +33,14 @@ makeactlist() async {
       'application_period': temp['application_period'], // 신청 기간
       'category': temp['category'], // 카테고리
       'pam': temp['pam'], // 팜
-      'e-mail' : temp['활동유형'], // 담당자 이메일
+      'contact' : temp['contact'], // 담당자 연락처
+      'manager' : temp['manager'], // 담당자
+      'head_count' : temp['head_count'], // 신청자 수
+      'e-mail' : temp['e-mail'], // 담당자 이메일
       'participating_grade' : temp['participating_grade'], // 참여 학년
       'operation_department' : temp['operation_department'], // 담당 기관
       'operation_period' : temp['operation_period'], //활동 기간
-      'image_path' : temp['image_path'] // 활동 이미지 경로 (따로 넣어줘야 할듯)
+      'image_path' : temp['image_path'] // 활동 이미지 경로
     });
 
     if (allactlist[i]['aplication_available'] == '운영중') nowactlist.add(allactlist[i]); // 운영 중일 경우
@@ -52,6 +52,8 @@ makeactlist() async {
   var tempextraact = await FirebaseFirestore.instance
       .collection('competition')
       .get(); //활동 list query 가져오기
+
+  print(tempextraact.docs.length);
 
   for (int i = 0; i < tempextraact.docs.length; i++) { // 활동 넣고, 운영 중 / 신청 가능 / 종료된 활동으로 분류하기
     Map<String, dynamic> temp = tempextraact.docs[i].data();
@@ -71,6 +73,13 @@ makeactlist() async {
 
 }
 
+class infolisttabbar extends StatefulWidget {
+  const infolisttabbar({Key? key}) : super(key: key);
+
+
+  @override
+  _infolisttabbarState createState() => _infolisttabbarState();
+}
 
 
 class _infolisttabbarState extends State<infolisttabbar>
@@ -84,9 +93,9 @@ class _infolisttabbarState extends State<infolisttabbar>
       length: 3,
       vsync: this, //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
     );
+    future_actlist = makeactlist(); //활동 list 만들기, (future 중복 방지)
     super.initState();
   }
-
 
 
   @override
@@ -97,8 +106,6 @@ class _infolisttabbarState extends State<infolisttabbar>
     final deviceHeight = MediaQuery.of(context).size.height;
     final standardDeviceHeight = 812;
     final Factor_Height = deviceHeight / standardDeviceHeight;
-
-    future_actlist = makeactlist(); //활동 list 만들기
 
     return Scaffold(
 
