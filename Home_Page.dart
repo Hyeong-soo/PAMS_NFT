@@ -65,6 +65,8 @@ List<int> attentionrank = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; //관심도(참여자 
 
 void sortbyattention() {
 
+  Attention.clear();
+
   for(int i = 0; i < 10; i++){
 
     Attention.add(ParticipateList[i]+LikenumList[i]); //attention list 추가
@@ -77,7 +79,7 @@ void sortbyattention() {
 
     for (int j = 0; j < Attention.length - 1; j++) {
 
-      if (Attention[j] < Attention[j+1]) { // 정렬
+      if (Attention[j] < Attention[j+1]) { // 내림차순으로 정렬
 
         int temp = attentionrank[j];
         attentionrank[j] = attentionrank[j + 1];
@@ -215,6 +217,8 @@ setimagepathlist() async{ //imagepath list를 생성하는 함수
 }
 
 sethotlist() async{
+
+  Second_List.clear();
 
   sortbyattention();
 
