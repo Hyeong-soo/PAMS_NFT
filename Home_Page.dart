@@ -68,8 +68,10 @@ void sortbyattention() {
   for(int i = 0; i < 10; i++){
 
     Attention.add(ParticipateList[i]+LikenumList[i]); //attention list 추가
-    print(Attention);
+
   }
+
+  print(Attention);
 
   for (int i = 0; i < Attention.length; i++) {
 
@@ -212,13 +214,17 @@ setimagepathlist() async{ //imagepath list를 생성하는 함수
 
 }
 
-sethotlist() {
+sethotlist() async{
+
+  sortbyattention();
+
   for(int i = 0; i< 5; i++){
 
     Second_List.add(Build_Second_Class(Image.asset('assets/'+ImagepathList[attentionrank[i]], alignment: Alignment.center,), ImagepathList[attentionrank[i]]));
-    print(Second_List);
-
   }
+
+  print(Second_List);
+
 
 }
 
@@ -458,7 +464,7 @@ class _Home_PageState extends State<Home_Page> {
     await setlikenum();
     await setimagepathlist();
     await setextralikenum();
-    return 1;
+    await sethotlist();
   }
 
   @override
@@ -471,9 +477,7 @@ class _Home_PageState extends State<Home_Page> {
             if(snapshot.hasData)
             {
               print("!1111111111111111111111111111");
-              i++;
-              sortbyattention();
-              sethotlist();
+
               return ListView(
                 scrollDirection: Axis.vertical,
                 children: <Widget>[
@@ -508,9 +512,6 @@ class _Home_PageState extends State<Home_Page> {
       ),
     );
 
-    //build할 때 second_list 채워넣기
-    //혹시 안되면 futurebuild로 하는 것도 생각해봐야 할듯?
-    //print(sethotlist());
   }
 
   Widget _Build_First()
@@ -667,7 +668,7 @@ class _Home_PageState extends State<Home_Page> {
                     child: GestureDetector(
                       onTap: () {
                         //print("111111111111111111");
-                        imagetoactinfo(Second_List[i].path!);
+                        imagetoactinfo(Second_List[i].path!, context);
                       },
                       child: Container(
                         height: 30 * Factor_Height,
