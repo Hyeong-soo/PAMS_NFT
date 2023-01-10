@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+//0x804c8e9d36dc3954046260Db0047696281878Df6
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -23,7 +24,7 @@ contract PamPlNet_TEST is ERC721URIStorage, Ownable{
 
 	Counters.Counter totalCount; //발행된 총 NFT 개수
 
-	constructor() ERC721("PamPlNet_TEST", "PPN") {}
+	constructor() ERC721("PamPlNet_V2", "PPN") {}
 
 	struct tokenInfo {
         uint id;
@@ -110,7 +111,6 @@ contract PamPlNet_TEST is ERC721URIStorage, Ownable{
 	
 	//dev@ address가 소유한 token들의 id 리스트 반환
 	function getIdsbyOwner(address _owner) public view returns(uint32[] memory) {
-		require( balanceOf(_owner) != 0, "Owner did not have token.");
 		
 		uint cnt =0;
 		uint32[] memory idList = new uint32[]( balanceOf(_owner) );
@@ -124,7 +124,6 @@ contract PamPlNet_TEST is ERC721URIStorage, Ownable{
 
 	//dev@ address가 소유한 token 정보 반환
 	function getTokensbyOwner(address _owner) public view returns(tokenInfo[] memory) {
-		require( balanceOf(_owner) != 0, "Owner did not have token.");
 		
 		uint cnt =0;
 		tokenInfo[] memory tokenList = new tokenInfo[]( balanceOf(_owner) );
@@ -138,8 +137,7 @@ contract PamPlNet_TEST is ERC721URIStorage, Ownable{
 
     //dev@ address가 소유한 token들의 id 리스트 반환
 	function getURIsbyOwner(address _owner) public view returns(string[] memory) {
-		require( balanceOf(_owner) != 0, "Owner did not have token.");
-		
+
 		uint cnt =0;
 		string[] memory URIList = new string[]( balanceOf(_owner) );
 		for(uint32 i =0 ; i< tokens.length ; i++){
